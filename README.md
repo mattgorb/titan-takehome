@@ -148,5 +148,5 @@ Per-bullet checklist mapped to the spec. `[x]` = complete, `[/]` = partial / inf
 | | Spec bullet | What / Where |
 |---|---|---|
 | [ ] | Beyond-surface eval framework | not started — current metrics reward overlap, not factual correctness |
-| [/] | Data curation A/B (curated vs naive) | infra: [configs/baseline-no-curation.yaml](configs/baseline-no-curation.yaml) + `--test-from` flag in [eval/run.py](src/titan/eval/run.py) so both runs score against the same curated test set; runs not yet executed |
+| [x] | Data curation A/B (curated vs naive) | both runs executed and evaluated against the same canonical test set; results in "Curation A/B (Tier 3)" above. **Curation did not help** at this scale (semsim 0.432 vs 0.480) — honest negative result. |
 | [/] | Multi-run comparison | infra: [configs/config2.yaml](configs/config2.yaml) (Qwen2.5-0.5B + wider LoRA + different batch/grad-accum split); `runs/<id>/` layout supports side-by-side comparison; second run not yet executed |
