@@ -20,8 +20,12 @@ _DTYPES = {"float32": "float32", "bfloat16": "bfloat16", "float16": "float16"}
 
 def load(cfg: Config, adapter_path: Optional[str | Path] = None) -> LoadedModel:
     """Load base model + tokenizer; optionally apply a LoRA adapter on top."""
+    import time
+    t = time.time()
+    print(f"[inference] importing torch / transformers / peft...", flush=True)
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
+    print(f"[inference] imports done ({time.time() - t:.1f}s); loading {cfg.model.base}...", flush=True)
 
     dtype = getattr(torch, _DTYPES.get(cfg.model.dtype, "float32"))
     tok = AutoTokenizer.from_pretrained(cfg.model.base)
@@ -29,16 +33,18 @@ def load(cfg: Config, adapter_path: Optional[str | Path] = None) -> LoadedModel:
         tok.pad_token = tok.eos_token
     # `dtype=` replaces deprecated `torch_dtype=` in transformers >= 4.45.
     model = AutoModelForCausalLM.from_pretrained(cfg.model.base, dtype=dtype)
+    print(f"[inference] base model loaded ({time.time() - t:.1f}s)", flush=True)
 
     # Apply adapter BEFORE moving to device — otherwise the adapter loads on
     # CPU and forward passes silently fall back to CPU on every step.
     if adapter_path is not None:
         from peft import PeftModel
         model = PeftModel.from_pretrained(model, str(adapter_path))
+        print(f"[inference] adapter applied ({time.time() - t:.1f}s)", flush=True)
 
     model = model.to(cfg.model.device)
     model.eval()
-    print(f"[inference] model on {cfg.model.device}, dtype={cfg.model.dtype}")
+    print(f"[inference] ready on {cfg.model.device}, dtype={cfg.model.dtype} ({time.time() - t:.1f}s total)", flush=True)
     return LoadedModel(tokenizer=tok, model=model, config=cfg)
 
 

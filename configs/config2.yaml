@@ -1,0 +1,53 @@
+# Experiment 2 — Qwen2.5-0.5B with a wider/deeper LoRA and a different
+# batch-vs-grad-accum split. Most other knobs match default.yaml so a
+# back-to-back comparison isolates the model + adapter capacity changes.
+
+seed: 42
+run_id: null
+runs_dir: runs
+data_dir: data
+
+model:
+  base: Qwen/Qwen2.5-0.5B   # ~3.7x params vs SmolLM-135M
+  device: mps
+  dtype: float32
+  max_length: 256
+
+data:
+  hf_dataset: gbharti/finance-alpaca
+  train_size: 4500          # held constant so the comparison is on the model+LoRA, not data volume
+  val_size: 50
+  test_size: 200
+  curate: true
+
+lora:
+  r: 16                     # 2x rank → ~2x trainable params per target module
+  alpha: 32                 # keep alpha = 2*r so effective scaling stays the same
+  dropout: 0.1              # bumped to compensate for higher capacity
+  target_modules: [q_proj, k_proj, v_proj, o_proj]   # full attention block instead of just q,v
+
+train:
+  epochs: 1
+  batch_size: 4             # 2x per-step batch
+  grad_accum: 4             # halved accumulation; effective batch 16 (same as default)
+  learning_rate: 2.0e-4
+  warmup_ratio: 0.03
+  weight_decay: 0.0
+  logging_steps: 5
+  eval_steps: 50
+  save_steps: 100
+  max_steps: -1
+
+eval:
+  num_samples: 15
+  num_qualitative: 15
+  metrics: [rouge, bertscore, semsim]
+  semsim_model: sentence-transformers/all-MiniLM-L6-v2
+  refusal_prompts: configs/refusal_prompts.yaml
+
+serve:
+  host: 0.0.0.0
+  port: 8000
+  max_new_tokens: 256
+  temperature: 0.2
+  top_p: 0.9

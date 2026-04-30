@@ -48,6 +48,10 @@ class EvalCfg(BaseModel):
     metrics: list[str] = Field(default_factory=lambda: ["rouge", "bertscore", "semsim"])
     semsim_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     refusal_prompts: str = "configs/refusal_prompts.yaml"
+    # Generation overrides for eval. Decoupled from serve so production serving
+    # can stay sample-based while eval runs greedy + tighter token cap for speed.
+    max_new_tokens: int = 128
+    temperature: float = 0.0   # 0 = greedy
 
 
 class ServeCfg(BaseModel):

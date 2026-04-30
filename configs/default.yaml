@@ -38,9 +38,9 @@ train:
   max_steps: -1       # -1 = full epoch(s)
 
 eval:
-  num_samples: 200
+  num_samples: 15
   num_qualitative: 15
-  metrics: [rouge, bertscore, semsim]
+  metrics: [rouge, semsim] #removed bertscore
   semsim_model: sentence-transformers/all-MiniLM-L6-v2
   refusal_prompts: configs/refusal_prompts.yaml
 

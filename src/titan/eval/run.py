@@ -21,6 +21,13 @@ def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--config", default="configs/default.yaml")
     p.add_argument("--run-id", default=None, help="Run dir to evaluate; defaults to runs/LATEST")
+    p.add_argument(
+        "--test-from",
+        default=None,
+        help="DatasetDict dir to source the test split from. Defaults to "
+             "<data_dir>/processed. Use this for fair A/B ablations where "
+             "multiple training runs need the same held-out test set.",
+    )
     args = p.parse_args()
 
     cfg = load_config(args.config)
@@ -35,9 +42,12 @@ def main() -> None:
     from titan.inference import generate, load
     lm = load(cfg, adapter_path=rd / "adapter")
 
-    # Load test split
+    # Load test split. --test-from lets ablation runs share a canonical test set
+    # even when their data/processed/ contents differ.
     from datasets import load_from_disk
-    splits = load_from_disk(str(Path(cfg.data_dir) / "processed"))
+    test_src = Path(args.test_from) if args.test_from else Path(cfg.data_dir) / "processed"
+    splits = load_from_disk(str(test_src))
+    print(f"[eval] test split sourced from {test_src}")
     test = splits["test"].select(range(min(cfg.eval.num_samples, len(splits["test"]))))
 
     import time
@@ -48,7 +58,11 @@ def main() -> None:
     t_total_start = time.time()
     for i, ex in enumerate(test):
         t0 = time.time()
-        out = generate(lm, ex["instruction"], ex.get("input"))
+        out = generate(
+            lm, ex["instruction"], ex.get("input"),
+            max_new_tokens=cfg.eval.max_new_tokens,
+            temperature=cfg.eval.temperature,
+        )
         dt = time.time() - t0
         preds.append(out)
         refs.append(ex["output"])
@@ -78,9 +92,18 @@ def main() -> None:
     from titan.eval.refusal import load_refusal_prompts, score as refusal_score
     refusal_prompts = load_refusal_prompts(cfg.eval.refusal_prompts)
     refusal_outputs: list[tuple[dict, str]] = []
-    for rp in refusal_prompts:
-        out = generate(lm, rp["question"])
+    print(f"[eval] running {len(refusal_prompts)} refusal prompts...")
+    for j, rp in enumerate(refusal_prompts):
+        t0 = time.time()
+        # Refusal answers are short ("I don't know", "outside my domain"); cap
+        # tokens harder to keep this stage fast.
+        out = generate(
+            lm, rp["question"],
+            max_new_tokens=min(cfg.eval.max_new_tokens, 64),
+            temperature=cfg.eval.temperature,
+        )
         refusal_outputs.append((rp, out))
+        print(f"  [refusal {j + 1}/{len(refusal_prompts)}] {time.time() - t0:.1f}s")
     metrics["refusal"] = refusal_score(refusal_outputs)
 
     # Persist

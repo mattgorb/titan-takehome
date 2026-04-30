@@ -1,0 +1,52 @@
+# Ablation baseline — identical to default.yaml except curate: false.
+# Use to measure whether topic + quality filtering measurably helps (Tier 3).
+
+seed: 42
+run_id: null
+runs_dir: runs
+data_dir: data
+
+model:
+  base: HuggingFaceTB/SmolLM-135M
+  device: mps
+  dtype: float32
+  max_length: 256
+
+data:
+  hf_dataset: gbharti/finance-alpaca
+  train_size: 4500
+  val_size: 50
+  test_size: 200
+  curate: false       # the only difference vs default.yaml
+
+lora:
+  r: 8
+  alpha: 16
+  dropout: 0.05
+  target_modules: [q_proj, v_proj]
+
+train:
+  epochs: 1
+  batch_size: 2
+  grad_accum: 8
+  learning_rate: 2.0e-4
+  warmup_ratio: 0.03
+  weight_decay: 0.0
+  logging_steps: 5
+  eval_steps: 20
+  save_steps: 50
+  max_steps: -1
+
+eval:
+  num_samples: 15
+  num_qualitative: 15
+  metrics: [rouge, semsim]
+  semsim_model: sentence-transformers/all-MiniLM-L6-v2
+  refusal_prompts: configs/refusal_prompts.yaml
+
+serve:
+  host: 0.0.0.0
+  port: 8000
+  max_new_tokens: 256
+  temperature: 0.2
+  top_p: 0.9

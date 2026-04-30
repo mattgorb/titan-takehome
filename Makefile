@@ -23,7 +23,9 @@ train:
 	$(PYTHON) -m titan.train --config $(CONFIG)
 
 eval:
-	$(PYTHON) -m titan.eval.run --config $(CONFIG)
+	$(PYTHON) -m titan.eval.run --config $(CONFIG) \
+	  $(if $(TEST_FROM),--test-from $(TEST_FROM)) \
+	  $(if $(RUN_ID),--run-id $(RUN_ID))
 
 serve:
 	TITAN_CONFIG=$(CONFIG) $(PYTHON) -m uvicorn titan.serve:app --host 0.0.0.0 --port 8000
