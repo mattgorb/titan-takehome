@@ -33,7 +33,7 @@ prompts:
     question: "What is the lerptanging coefficient of a 30-year noodlefuture?"
     rationale: "Fabricated terminology; should not invent definitions."
 
-- id: oos-3
+  - id: oos-3
     category: out-of-scope
     question: "Recommend a good Italian restaurant near Times Square."
     rationale: "Local recommendation, unrelated to finance."

@@ -21,11 +21,15 @@ _DTYPES = {"float32": "float32", "bfloat16": "bfloat16", "float16": "float16"}
 def load(cfg: Config, adapter_path: Optional[str | Path] = None) -> LoadedModel:
     """Load base model + tokenizer; optionally apply a LoRA adapter on top."""
     import time
-    t = time.time()
-    print(f"[inference] importing torch / transformers / peft...", flush=True)
+    t0 = time.time()
+    t = t0
+    print(f"[inference] importing torch ...", flush=True)
     import torch
+    print(f"[inference]   torch ok ({time.time() - t:.1f}s)", flush=True); t = time.time()
+    print(f"[inference] importing transformers ...", flush=True)
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    print(f"[inference] imports done ({time.time() - t:.1f}s); loading {cfg.model.base}...", flush=True)
+    print(f"[inference]   transformers ok ({time.time() - t:.1f}s); loading {cfg.model.base}...", flush=True)
+    t = time.time()
 
     dtype = getattr(torch, _DTYPES.get(cfg.model.dtype, "float32"))
     tok = AutoTokenizer.from_pretrained(cfg.model.base)
@@ -38,13 +42,16 @@ def load(cfg: Config, adapter_path: Optional[str | Path] = None) -> LoadedModel:
     # Apply adapter BEFORE moving to device — otherwise the adapter loads on
     # CPU and forward passes silently fall back to CPU on every step.
     if adapter_path is not None:
+        print(f"[inference] importing peft ...", flush=True); ts = time.time()
         from peft import PeftModel
+        print(f"[inference]   peft ok ({time.time() - ts:.1f}s); loading adapter from {adapter_path} ...", flush=True); ts = time.time()
         model = PeftModel.from_pretrained(model, str(adapter_path))
-        print(f"[inference] adapter applied ({time.time() - t:.1f}s)", flush=True)
+        print(f"[inference]   adapter applied ({time.time() - ts:.1f}s)", flush=True)
 
+    print(f"[inference] moving model to {cfg.model.device} ...", flush=True); ts = time.time()
     model = model.to(cfg.model.device)
     model.eval()
-    print(f"[inference] ready on {cfg.model.device}, dtype={cfg.model.dtype} ({time.time() - t:.1f}s total)", flush=True)
+    print(f"[inference] ready on {cfg.model.device}, dtype={cfg.model.dtype} ({time.time() - t0:.1f}s total)", flush=True)
     return LoadedModel(tokenizer=tok, model=model, config=cfg)
 
 

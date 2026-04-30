@@ -603,3 +603,538 @@ Adding a "loading…" print at the start of `load()` so you can tell the differe
 <ide_opened_file>The user opened the file /Users/matt/Desktop/projects/titan/src/titan/inference.py in the IDE. This may or may not be related to the current task.</ide_opened_file>
 hanging here: [inference] importing torch / transformers / peft...
 
+
+## 2026-04-30 23:16:43 (user)
+
+<ide_opened_file>The user opened the file /Users/matt/Desktop/projects/titan/src/titan/inference.py in the IDE. This may or may not be related to the current task.</ide_opened_file>
+hanging here: 
+[notice] A new release of pip is available: 24.3.1 -> 26.1
+[notice] To update, run: pip install --upgrade pip
+(.venv) matt@Mac titan % HF_HUB_OFFLINE=1 make eval
+.venv/bin/python -m titan.eval.run --config configs/default.yaml \
+	   \
+	  
+[eval] run=20260430-180931 dir=runs/20260430-180931
+[inference] importing torch ...
+[inference]   torch ok (0.0s)
+[inference] importing transformers ...
+
+
+## 2026-04-30 23:17:37 (user)
+
+make eval
+.venv/bin/python -m titan.eval.run --config configs/default.yaml \
+	   \
+	  
+/Users/matt/Desktop/projects/titan/.venv/bin/python: Error while finding module specification for 'titan.eval.run' (ModuleNotFoundError: No module named 'titan')
+make: *** [eval] Error 1
+(.venv) matt@Mac titan % make setup
+.venv/bin/python -m pip install -e .
+Obtaining file:///Users/matt/Desktop/projects/titan
+  Installing build dependencies ... done
+  Checking if build backend supports build_editable ... done
+  Getting requirements to build editable ... done
+  Preparing editable metadata (pyproject.toml) ... done
+Requirement already satisfied: transformers>=4.45 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (5.7.0)
+Requirement already satisfied: peft>=0.13 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (0.19.1)
+Requirement already satisfied: datasets>=3.0 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (4.8.5)
+Requirement already satisfied: accelerate>=1.0 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (1.13.0)
+Requirement already satisfied: torch>=2.4 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (2.11.0)
+Requirement already satisfied: pydantic>=2.7 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (2.13.3)
+Requirement already satisfied: pyyaml>=6.0 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (6.0.3)
+Requirement already satisfied: fastapi>=0.115 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (0.136.1)
+Requirement already satisfied: uvicorn>=0.30 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (0.46.0)
+Requirement already satisfied: rouge-score>=0.1.2 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (0.1.2)
+Requirement already satisfied: bert-score>=0.3.13 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (0.3.13)
+Requirement already satisfied: sentence-transformers>=3.0 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (5.4.1)
+Requirement already satisfied: numpy>=1.26 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (2.4.4)
+Requirement already satisfied: packaging>=20.0 in ./.venv/lib/python3.13/site-packages (from accelerate>=1.0->titan==0.1.0) (26.2)
+Requirement already satisfied: psutil in ./.venv/lib/python3.13/site-packages (from accelerate>=1.0->titan==0.1.0) (7.2.2)
+Requirement already satisfied: huggingface_hub>=0.21.0 in ./.venv/lib/python3.13/site-packages (from accelerate>=1.0->titan==0.1.0) (1.13.0)
+Requirement already satisfied: safetensors>=0.4.3 in ./.venv/lib/python3.13/site-packages (from accelerate>=1.0->titan==0.1.0) (0.7.0)
+Requirement already satisfied: pandas>=1.0.1 in ./.venv/lib/python3.13/site-packages (from bert-score>=0.3.13->titan==0.1.0) (3.0.2)
+Requirement already satisfied: requests in ./.venv/lib/python3.13/site-packages (from bert-score>=0.3.13->titan==0.1.0) (2.33.1)
+Requirement already satisfied: tqdm>=4.31.1 in ./.venv/lib/python3.13/site-packages (from bert-score>=0.3.13->titan==0.1.0) (4.67.3)
+Requirement already satisfied: matplotlib in ./.venv/lib/python3.13/site-packages (from bert-score>=0.3.13->titan==0.1.0) (3.10.9)
+Requirement already satisfied: filelock in ./.venv/lib/python3.13/site-packages (from datasets>=3.0->titan==0.1.0) (3.29.0)
+Requirement already satisfied: pyarrow>=21.0.0 in ./.venv/lib/python3.13/site-packages (from datasets>=3.0->titan==0.1.0) (24.0.0)
+Requirement already satisfied: dill<0.4.2,>=0.3.0 in ./.venv/lib/python3.13/site-packages (from datasets>=3.0->titan==0.1.0) (0.4.1)
+Requirement already satisfied: httpx<1.0.0 in ./.venv/lib/python3.13/site-packages (from datasets>=3.0->titan==0.1.0) (0.28.1)
+Requirement already satisfied: xxhash in ./.venv/lib/python3.13/site-packages (from datasets>=3.0->titan==0.1.0) (3.7.0)
+Requirement already satisfied: multiprocess<0.70.20 in ./.venv/lib/python3.13/site-packages (from datasets>=3.0->titan==0.1.0) (0.70.19)
+Requirement already satisfied: fsspec<=2026.2.0,>=2023.1.0 in ./.venv/lib/python3.13/site-packages (from fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (2026.2.0)
+Requirement already satisfied: starlette>=0.46.0 in ./.venv/lib/python3.13/site-packages (from fastapi>=0.115->titan==0.1.0) (1.0.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in ./.venv/lib/python3.13/site-packages (from fastapi>=0.115->titan==0.1.0) (4.15.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in ./.venv/lib/python3.13/site-packages (from fastapi>=0.115->titan==0.1.0) (0.4.2)
+Requirement already satisfied: annotated-doc>=0.0.2 in ./.venv/lib/python3.13/site-packages (from fastapi>=0.115->titan==0.1.0) (0.0.4)
+Requirement already satisfied: annotated-types>=0.6.0 in ./.venv/lib/python3.13/site-packages (from pydantic>=2.7->titan==0.1.0) (0.7.0)
+Requirement already satisfied: pydantic-core==2.46.3 in ./.venv/lib/python3.13/site-packages (from pydantic>=2.7->titan==0.1.0) (2.46.3)
+Requirement already satisfied: absl-py in ./.venv/lib/python3.13/site-packages (from rouge-score>=0.1.2->titan==0.1.0) (2.4.0)
+Requirement already satisfied: nltk in ./.venv/lib/python3.13/site-packages (from rouge-score>=0.1.2->titan==0.1.0) (3.9.4)
+Requirement already satisfied: six>=1.14.0 in ./.venv/lib/python3.13/site-packages (from rouge-score>=0.1.2->titan==0.1.0) (1.17.0)
+Requirement already satisfied: scikit-learn>=0.22.0 in ./.venv/lib/python3.13/site-packages (from sentence-transformers>=3.0->titan==0.1.0) (1.8.0)
+Requirement already satisfied: scipy>=1.0.0 in ./.venv/lib/python3.13/site-packages (from sentence-transformers>=3.0->titan==0.1.0) (1.17.1)
+Requirement already satisfied: setuptools<82 in ./.venv/lib/python3.13/site-packages (from torch>=2.4->titan==0.1.0) (81.0.0)
+Requirement already satisfied: sympy>=1.13.3 in ./.venv/lib/python3.13/site-packages (from torch>=2.4->titan==0.1.0) (1.14.0)
+Requirement already satisfied: networkx>=2.5.1 in ./.venv/lib/python3.13/site-packages (from torch>=2.4->titan==0.1.0) (3.6.1)
+Requirement already satisfied: jinja2 in ./.venv/lib/python3.13/site-packages (from torch>=2.4->titan==0.1.0) (3.1.6)
+Requirement already satisfied: regex>=2025.10.22 in ./.venv/lib/python3.13/site-packages (from transformers>=4.45->titan==0.1.0) (2026.4.4)
+Requirement already satisfied: tokenizers<=0.23.0,>=0.22.0 in ./.venv/lib/python3.13/site-packages (from transformers>=4.45->titan==0.1.0) (0.22.2)
+Requirement already satisfied: typer in ./.venv/lib/python3.13/site-packages (from transformers>=4.45->titan==0.1.0) (0.25.1)
+Requirement already satisfied: click>=7.0 in ./.venv/lib/python3.13/site-packages (from uvicorn>=0.30->titan==0.1.0) (8.3.3)
+Requirement already satisfied: h11>=0.8 in ./.venv/lib/python3.13/site-packages (from uvicorn>=0.30->titan==0.1.0) (0.16.0)
+Requirement already satisfied: aiohttp!=4.0.0a0,!=4.0.0a1 in ./.venv/lib/python3.13/site-packages (from fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (3.13.5)
+Requirement already satisfied: anyio in ./.venv/lib/python3.13/site-packages (from httpx<1.0.0->datasets>=3.0->titan==0.1.0) (4.13.0)
+Requirement already satisfied: certifi in ./.venv/lib/python3.13/site-packages (from httpx<1.0.0->datasets>=3.0->titan==0.1.0) (2026.4.22)
+Requirement already satisfied: httpcore==1.* in ./.venv/lib/python3.13/site-packages (from httpx<1.0.0->datasets>=3.0->titan==0.1.0) (1.0.9)
+Requirement already satisfied: idna in ./.venv/lib/python3.13/site-packages (from httpx<1.0.0->datasets>=3.0->titan==0.1.0) (3.13)
+Requirement already satisfied: hf-xet<2.0.0,>=1.4.3 in ./.venv/lib/python3.13/site-packages (from huggingface_hub>=0.21.0->accelerate>=1.0->titan==0.1.0) (1.4.3)
+Requirement already satisfied: python-dateutil>=2.8.2 in ./.venv/lib/python3.13/site-packages (from pandas>=1.0.1->bert-score>=0.3.13->titan==0.1.0) (2.9.0.post0)
+Requirement already satisfied: charset_normalizer<4,>=2 in ./.venv/lib/python3.13/site-packages (from requests->bert-score>=0.3.13->titan==0.1.0) (3.4.7)
+Requirement already satisfied: urllib3<3,>=1.26 in ./.venv/lib/python3.13/site-packages (from requests->bert-score>=0.3.13->titan==0.1.0) (2.6.3)
+Requirement already satisfied: joblib>=1.3.0 in ./.venv/lib/python3.13/site-packages (from scikit-learn>=0.22.0->sentence-transformers>=3.0->titan==0.1.0) (1.5.3)
+Requirement already satisfied: threadpoolctl>=3.2.0 in ./.venv/lib/python3.13/site-packages (from scikit-learn>=0.22.0->sentence-transformers>=3.0->titan==0.1.0) (3.6.0)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in ./.venv/lib/python3.13/site-packages (from sympy>=1.13.3->torch>=2.4->titan==0.1.0) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in ./.venv/lib/python3.13/site-packages (from jinja2->torch>=2.4->titan==0.1.0) (3.0.3)
+Requirement already satisfied: contourpy>=1.0.1 in ./.venv/lib/python3.13/site-packages (from matplotlib->bert-score>=0.3.13->titan==0.1.0) (1.3.3)
+Requirement already satisfied: cycler>=0.10 in ./.venv/lib/python3.13/site-packages (from matplotlib->bert-score>=0.3.13->titan==0.1.0) (0.12.1)
+Requirement already satisfied: fonttools>=4.22.0 in ./.venv/lib/python3.13/site-packages (from matplotlib->bert-score>=0.3.13->titan==0.1.0) (4.62.1)
+Requirement already satisfied: kiwisolver>=1.3.1 in ./.venv/lib/python3.13/site-packages (from matplotlib->bert-score>=0.3.13->titan==0.1.0) (1.5.0)
+Requirement already satisfied: pillow>=8 in ./.venv/lib/python3.13/site-packages (from matplotlib->bert-score>=0.3.13->titan==0.1.0) (12.2.0)
+Requirement already satisfied: pyparsing>=3 in ./.venv/lib/python3.13/site-packages (from matplotlib->bert-score>=0.3.13->titan==0.1.0) (3.3.2)
+Requirement already satisfied: shellingham>=1.3.0 in ./.venv/lib/python3.13/site-packages (from typer->transformers>=4.45->titan==0.1.0) (1.5.4)
+Requirement already satisfied: rich>=13.8.0 in ./.venv/lib/python3.13/site-packages (from typer->transformers>=4.45->titan==0.1.0) (15.0.0)
+Requirement already satisfied: aiohappyeyeballs>=2.5.0 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (2.6.1)
+Requirement already satisfied: aiosignal>=1.4.0 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (1.4.0)
+Requirement already satisfied: attrs>=17.3.0 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (26.1.0)
+Requirement already satisfied: frozenlist>=1.1.1 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (1.8.0)
+Requirement already satisfied: multidict<7.0,>=4.5 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (6.7.1)
+Requirement already satisfied: propcache>=0.2.0 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (0.4.1)
+Requirement already satisfied: yarl<2.0,>=1.17.0 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (1.23.0)
+Requirement already satisfied: markdown-it-py>=2.2.0 in ./.venv/lib/python3.13/site-packages (from rich>=13.8.0->typer->transformers>=4.45->titan==0.1.0) (4.0.0)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in ./.venv/lib/python3.13/site-packages (from rich>=13.8.0->typer->transformers>=4.45->titan==0.1.0) (2.20.0)
+Requirement already satisfied: mdurl~=0.1 in ./.venv/lib/python3.13/site-packages (from markdown-it-py>=2.2.0->rich>=13.8.0->typer->transformers>=4.45->titan==0.1.0) (0.1.2)
+Building wheels for collected packages: titan
+  Building editable for titan (pyproject.toml) ... done
+  Created wheel for titan: filename=titan-0.1.0-0.editable-py3-none-any.whl size=1397 sha256=5ad61c73806680fdf81ac8a981ef69f4303e6803316e1e36c82fb8748912a83b
+  Stored in directory: /private/var/folders/l7/4w9c8pjx4l9dp1m863b2nmcw0000gn/T/pip-ephem-wheel-cache-hdtdt7ks/wheels/dc/ca/db/a7b05af011e6070bbb09e789ea57db43d9c86763fe0ddcfe9e
+Successfully built titan
+Installing collected packages: titan
+  Attempting uninstall: titan
+    Found existing installation: titan 0.1.0
+    Uninstalling titan-0.1.0:
+      Successfully uninstalled titan-0.1.0
+Successfully installed titan-0.1.0
+
+[notice] A new release of pip is available: 24.3.1 -> 26.1
+[notice] To update, run: pip install --upgrade pip
+(.venv) matt@Mac titan % make eval
+.venv/bin/python -m titan.eval.run --config configs/default.yaml \
+	   \
+	  
+[eval] run=20260430-180931 dir=runs/20260430-180931
+[inference] importing torch ...
+[inference]   torch ok (0.0s)
+[inference] importing transformers ...
+
+
+## 2026-04-30 19:18:10 (assistant)
+
+Caught it: your `transformers==5.7.0` is the problem. That's the brand-new major version (released late 2025); our code was written for the 4.x API and 5.x has known import-time slowness on Apple Silicon. Pinning to 4.x will fix it.
+
+## 2026-04-30 23:18:42 (user)
+
+<ide_opened_file>The user opened the file /Users/matt/Desktop/projects/titan/pyproject.toml in the IDE. This may or may not be related to the current task.</ide_opened_file>
+its hanging here: # Kill any zombie python first (a hung make eval may still be holding the device)
+pkill -9 -f "python -m titan" 2>/dev/null || true
+
+# Force-downgrade to transformers 4.x (will pull a compatible tokenizers)
+.venv/bin/pip install "transformers>=4.45,<5"
+
+# Sanity-check it imports fast in isolation before re-running eval
+.venv/bin/python -c "import time; t=time.time(); import transformers; print(f'transformers {transformers.__version__} ok in {time.time()-t:.1f}s')"
+
+# If that prints "ok in <30s", run eval:
+make eval
+
+zsh: number expected
+zsh: unknown file attribute: i
+Collecting transformers<5,>=4.45
+  Downloading transformers-4.57.6-py3-none-any.whl.metadata (43 kB)
+Requirement already satisfied: filelock in ./.venv/lib/python3.13/site-packages (from transformers<5,>=4.45) (3.29.0)
+Collecting huggingface-hub<1.0,>=0.34.0 (from transformers<5,>=4.45)
+  Downloading huggingface_hub-0.36.2-py3-none-any.whl.metadata (15 kB)
+Requirement already satisfied: numpy>=1.17 in ./.venv/lib/python3.13/site-packages (from transformers<5,>=4.45) (2.4.4)
+Requirement already satisfied: packaging>=20.0 in ./.venv/lib/python3.13/site-packages (from transformers<5,>=4.45) (26.2)
+Requirement already satisfied: pyyaml>=5.1 in ./.venv/lib/python3.13/site-packages (from transformers<5,>=4.45) (6.0.3)
+Requirement already satisfied: regex!=2019.12.17 in ./.venv/lib/python3.13/site-packages (from transformers<5,>=4.45) (2026.4.4)
+Requirement already satisfied: requests in ./.venv/lib/python3.13/site-packages (from transformers<5,>=4.45) (2.33.1)
+Requirement already satisfied: tokenizers<=0.23.0,>=0.22.0 in ./.venv/lib/python3.13/site-packages (from transformers<5,>=4.45) (0.22.2)
+Requirement already satisfied: safetensors>=0.4.3 in ./.venv/lib/python3.13/site-packages (from transformers<5,>=4.45) (0.7.0)
+Requirement already satisfied: tqdm>=4.27 in ./.venv/lib/python3.13/site-packages (from transformers<5,>=4.45) (4.67.3)
+Requirement already satisfied: fsspec>=2023.5.0 in ./.venv/lib/python3.13/site-packages (from huggingface-hub<1.0,>=0.34.0->transformers<5,>=4.45) (2026.2.0)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in ./.venv/lib/python3.13/site-packages (from huggingface-hub<1.0,>=0.34.0->transformers<5,>=4.45) (1.4.3)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in ./.venv/lib/python3.13/site-packages (from huggingface-hub<1.0,>=0.34.0->transformers<5,>=4.45) (4.15.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in ./.venv/lib/python3.13/site-packages (from requests->transformers<5,>=4.45) (3.4.7)
+Requirement already satisfied: idna<4,>=2.5 in ./.venv/lib/python3.13/site-packages (from requests->transformers<5,>=4.45) (3.13)
+Requirement already satisfied: urllib3<3,>=1.26 in ./.venv/lib/python3.13/site-packages (from requests->transformers<5,>=4.45) (2.6.3)
+Requirement already satisfied: certifi>=2023.5.7 in ./.venv/lib/python3.13/site-packages (from requests->transformers<5,>=4.45) (2026.4.22)
+Downloading transformers-4.57.6-py3-none-any.whl (12.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.0/12.0 MB 54.7 MB/s eta 0:00:00
+Downloading huggingface_hub-0.36.2-py3-none-any.whl (566 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 23.5 MB/s eta 0:00:00
+Installing collected packages: huggingface-hub, transformers
+  Attempting uninstall: huggingface-hub
+    Found existing installation: huggingface_hub 1.13.0
+    Uninstalling huggingface_hub-1.13.0:
+      Successfully uninstalled huggingface_hub-1.13.0
+  Attempting uninstall: transformers
+    Found existing installation: transformers 5.7.0
+    Uninstalling transformers-5.7.0:
+      Successfully uninstalled transformers-5.7.0
+Successfully installed huggingface-hub-0.36.2 transformers-4.57.6
+
+[notice] A new release of pip is available: 24.3.1 -> 26.1
+[notice] To update, run: pip install --upgrade pip
+zsh: command not found: #
+
+
+## 2026-04-30 23:19:28 (user)
+
+its doign nothing nowrs/matt/Desktop/projects/titan/.venv/bin/python: Error while finding module specification for 'titan.eval.run' (ModuleNotFoundError: No module named 'titan')
+make: *** [eval] Error 1
+(.venv) matt@Mac titan % 
+(.venv) matt@Mac titan % .venv/bin/python -c "import time; t=time.time(); import transformers; print(f'{transformers.__version__} ok in {time.time()-t:.1f}s')"
+
+make eval
+4.57.6 ok in 19.0s
+.venv/bin/python -m titan.eval.run --config configs/default.yaml \
+	   \
+	  
+/Users/matt/Desktop/projects/titan/.venv/bin/python: Error while finding module specification for 'titan.eval.run' (ModuleNotFoundError: No module named 'titan')
+make: *** [eval] Error 1
+(.venv) matt@Mac titan % 
+(.venv) matt@Mac titan % 
+(.venv) matt@Mac titan % 
+(.venv) matt@Mac titan %
+
+
+## 2026-04-30 23:20:13 (user)
+
+<ide_opened_file>The user opened the file /Users/matt/Desktop/projects/titan/configs/default.yaml in the IDE. This may or may not be related to the current task.</ide_opened_file>
+back to my original problem: ac titan % 
+(.venv) matt@Mac titan % make setup
+.venv/bin/python -m pip install -e .
+Obtaining file:///Users/matt/Desktop/projects/titan
+  Installing build dependencies ... done
+  Checking if build backend supports build_editable ... done
+  Getting requirements to build editable ... done
+  Preparing editable metadata (pyproject.toml) ... done
+Requirement already satisfied: transformers<5,>=4.45 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (4.57.6)
+Requirement already satisfied: peft>=0.13 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (0.19.1)
+Requirement already satisfied: datasets>=3.0 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (4.8.5)
+Requirement already satisfied: accelerate>=1.0 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (1.13.0)
+Requirement already satisfied: torch>=2.4 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (2.11.0)
+Requirement already satisfied: pydantic>=2.7 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (2.13.3)
+Requirement already satisfied: pyyaml>=6.0 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (6.0.3)
+Requirement already satisfied: fastapi>=0.115 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (0.136.1)
+Requirement already satisfied: uvicorn>=0.30 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (0.46.0)
+Requirement already satisfied: rouge-score>=0.1.2 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (0.1.2)
+Requirement already satisfied: bert-score>=0.3.13 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (0.3.13)
+Requirement already satisfied: sentence-transformers>=3.0 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (5.4.1)
+Requirement already satisfied: numpy>=1.26 in ./.venv/lib/python3.13/site-packages (from titan==0.1.0) (2.4.4)
+Requirement already satisfied: packaging>=20.0 in ./.venv/lib/python3.13/site-packages (from accelerate>=1.0->titan==0.1.0) (26.2)
+Requirement already satisfied: psutil in ./.venv/lib/python3.13/site-packages (from accelerate>=1.0->titan==0.1.0) (7.2.2)
+Requirement already satisfied: huggingface_hub>=0.21.0 in ./.venv/lib/python3.13/site-packages (from accelerate>=1.0->titan==0.1.0) (0.36.2)
+Requirement already satisfied: safetensors>=0.4.3 in ./.venv/lib/python3.13/site-packages (from accelerate>=1.0->titan==0.1.0) (0.7.0)
+Requirement already satisfied: pandas>=1.0.1 in ./.venv/lib/python3.13/site-packages (from bert-score>=0.3.13->titan==0.1.0) (3.0.2)
+Requirement already satisfied: requests in ./.venv/lib/python3.13/site-packages (from bert-score>=0.3.13->titan==0.1.0) (2.33.1)
+Requirement already satisfied: tqdm>=4.31.1 in ./.venv/lib/python3.13/site-packages (from bert-score>=0.3.13->titan==0.1.0) (4.67.3)
+Requirement already satisfied: matplotlib in ./.venv/lib/python3.13/site-packages (from bert-score>=0.3.13->titan==0.1.0) (3.10.9)
+Requirement already satisfied: filelock in ./.venv/lib/python3.13/site-packages (from datasets>=3.0->titan==0.1.0) (3.29.0)
+Requirement already satisfied: pyarrow>=21.0.0 in ./.venv/lib/python3.13/site-packages (from datasets>=3.0->titan==0.1.0) (24.0.0)
+Requirement already satisfied: dill<0.4.2,>=0.3.0 in ./.venv/lib/python3.13/site-packages (from datasets>=3.0->titan==0.1.0) (0.4.1)
+Requirement already satisfied: httpx<1.0.0 in ./.venv/lib/python3.13/site-packages (from datasets>=3.0->titan==0.1.0) (0.28.1)
+Requirement already satisfied: xxhash in ./.venv/lib/python3.13/site-packages (from datasets>=3.0->titan==0.1.0) (3.7.0)
+Requirement already satisfied: multiprocess<0.70.20 in ./.venv/lib/python3.13/site-packages (from datasets>=3.0->titan==0.1.0) (0.70.19)
+Requirement already satisfied: fsspec<=2026.2.0,>=2023.1.0 in ./.venv/lib/python3.13/site-packages (from fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (2026.2.0)
+Requirement already satisfied: starlette>=0.46.0 in ./.venv/lib/python3.13/site-packages (from fastapi>=0.115->titan==0.1.0) (1.0.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in ./.venv/lib/python3.13/site-packages (from fastapi>=0.115->titan==0.1.0) (4.15.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in ./.venv/lib/python3.13/site-packages (from fastapi>=0.115->titan==0.1.0) (0.4.2)
+Requirement already satisfied: annotated-doc>=0.0.2 in ./.venv/lib/python3.13/site-packages (from fastapi>=0.115->titan==0.1.0) (0.0.4)
+Requirement already satisfied: annotated-types>=0.6.0 in ./.venv/lib/python3.13/site-packages (from pydantic>=2.7->titan==0.1.0) (0.7.0)
+Requirement already satisfied: pydantic-core==2.46.3 in ./.venv/lib/python3.13/site-packages (from pydantic>=2.7->titan==0.1.0) (2.46.3)
+Requirement already satisfied: absl-py in ./.venv/lib/python3.13/site-packages (from rouge-score>=0.1.2->titan==0.1.0) (2.4.0)
+Requirement already satisfied: nltk in ./.venv/lib/python3.13/site-packages (from rouge-score>=0.1.2->titan==0.1.0) (3.9.4)
+Requirement already satisfied: six>=1.14.0 in ./.venv/lib/python3.13/site-packages (from rouge-score>=0.1.2->titan==0.1.0) (1.17.0)
+Requirement already satisfied: scikit-learn>=0.22.0 in ./.venv/lib/python3.13/site-packages (from sentence-transformers>=3.0->titan==0.1.0) (1.8.0)
+Requirement already satisfied: scipy>=1.0.0 in ./.venv/lib/python3.13/site-packages (from sentence-transformers>=3.0->titan==0.1.0) (1.17.1)
+Requirement already satisfied: setuptools<82 in ./.venv/lib/python3.13/site-packages (from torch>=2.4->titan==0.1.0) (81.0.0)
+Requirement already satisfied: sympy>=1.13.3 in ./.venv/lib/python3.13/site-packages (from torch>=2.4->titan==0.1.0) (1.14.0)
+Requirement already satisfied: networkx>=2.5.1 in ./.venv/lib/python3.13/site-packages (from torch>=2.4->titan==0.1.0) (3.6.1)
+Requirement already satisfied: jinja2 in ./.venv/lib/python3.13/site-packages (from torch>=2.4->titan==0.1.0) (3.1.6)
+Requirement already satisfied: regex!=2019.12.17 in ./.venv/lib/python3.13/site-packages (from transformers<5,>=4.45->titan==0.1.0) (2026.4.4)
+Requirement already satisfied: tokenizers<=0.23.0,>=0.22.0 in ./.venv/lib/python3.13/site-packages (from transformers<5,>=4.45->titan==0.1.0) (0.22.2)
+Requirement already satisfied: click>=7.0 in ./.venv/lib/python3.13/site-packages (from uvicorn>=0.30->titan==0.1.0) (8.3.3)
+Requirement already satisfied: h11>=0.8 in ./.venv/lib/python3.13/site-packages (from uvicorn>=0.30->titan==0.1.0) (0.16.0)
+Requirement already satisfied: aiohttp!=4.0.0a0,!=4.0.0a1 in ./.venv/lib/python3.13/site-packages (from fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (3.13.5)
+Requirement already satisfied: anyio in ./.venv/lib/python3.13/site-packages (from httpx<1.0.0->datasets>=3.0->titan==0.1.0) (4.13.0)
+Requirement already satisfied: certifi in ./.venv/lib/python3.13/site-packages (from httpx<1.0.0->datasets>=3.0->titan==0.1.0) (2026.4.22)
+Requirement already satisfied: httpcore==1.* in ./.venv/lib/python3.13/site-packages (from httpx<1.0.0->datasets>=3.0->titan==0.1.0) (1.0.9)
+Requirement already satisfied: idna in ./.venv/lib/python3.13/site-packages (from httpx<1.0.0->datasets>=3.0->titan==0.1.0) (3.13)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in ./.venv/lib/python3.13/site-packages (from huggingface_hub>=0.21.0->accelerate>=1.0->titan==0.1.0) (1.4.3)
+Requirement already satisfied: python-dateutil>=2.8.2 in ./.venv/lib/python3.13/site-packages (from pandas>=1.0.1->bert-score>=0.3.13->titan==0.1.0) (2.9.0.post0)
+Requirement already satisfied: charset_normalizer<4,>=2 in ./.venv/lib/python3.13/site-packages (from requests->bert-score>=0.3.13->titan==0.1.0) (3.4.7)
+Requirement already satisfied: urllib3<3,>=1.26 in ./.venv/lib/python3.13/site-packages (from requests->bert-score>=0.3.13->titan==0.1.0) (2.6.3)
+Requirement already satisfied: joblib>=1.3.0 in ./.venv/lib/python3.13/site-packages (from scikit-learn>=0.22.0->sentence-transformers>=3.0->titan==0.1.0) (1.5.3)
+Requirement already satisfied: threadpoolctl>=3.2.0 in ./.venv/lib/python3.13/site-packages (from scikit-learn>=0.22.0->sentence-transformers>=3.0->titan==0.1.0) (3.6.0)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in ./.venv/lib/python3.13/site-packages (from sympy>=1.13.3->torch>=2.4->titan==0.1.0) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in ./.venv/lib/python3.13/site-packages (from jinja2->torch>=2.4->titan==0.1.0) (3.0.3)
+Requirement already satisfied: contourpy>=1.0.1 in ./.venv/lib/python3.13/site-packages (from matplotlib->bert-score>=0.3.13->titan==0.1.0) (1.3.3)
+Requirement already satisfied: cycler>=0.10 in ./.venv/lib/python3.13/site-packages (from matplotlib->bert-score>=0.3.13->titan==0.1.0) (0.12.1)
+Requirement already satisfied: fonttools>=4.22.0 in ./.venv/lib/python3.13/site-packages (from matplotlib->bert-score>=0.3.13->titan==0.1.0) (4.62.1)
+Requirement already satisfied: kiwisolver>=1.3.1 in ./.venv/lib/python3.13/site-packages (from matplotlib->bert-score>=0.3.13->titan==0.1.0) (1.5.0)
+Requirement already satisfied: pillow>=8 in ./.venv/lib/python3.13/site-packages (from matplotlib->bert-score>=0.3.13->titan==0.1.0) (12.2.0)
+Requirement already satisfied: pyparsing>=3 in ./.venv/lib/python3.13/site-packages (from matplotlib->bert-score>=0.3.13->titan==0.1.0) (3.3.2)
+Requirement already satisfied: aiohappyeyeballs>=2.5.0 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (2.6.1)
+Requirement already satisfied: aiosignal>=1.4.0 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (1.4.0)
+Requirement already satisfied: attrs>=17.3.0 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (26.1.0)
+Requirement already satisfied: frozenlist>=1.1.1 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (1.8.0)
+Requirement already satisfied: multidict<7.0,>=4.5 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (6.7.1)
+Requirement already satisfied: propcache>=0.2.0 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (0.4.1)
+Requirement already satisfied: yarl<2.0,>=1.17.0 in ./.venv/lib/python3.13/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets>=3.0->titan==0.1.0) (1.23.0)
+Building wheels for collected packages: titan
+  Building editable for titan (pyproject.toml) ... done
+  Created wheel for titan: filename=titan-0.1.0-0.editable-py3-none-any.whl size=1401 sha256=0b6748a8d78c031046c898c0b00b83b1d40eea4e10f1ccb691aa2ffa1b015863
+  Stored in directory: /private/var/folders/l7/4w9c8pjx4l9dp1m863b2nmcw0000gn/T/pip-ephem-wheel-cache-4sijd8km/wheels/dc/ca/db/a7b05af011e6070bbb09e789ea57db43d9c86763fe0ddcfe9e
+Successfully built titan
+Installing collected packages: titan
+  Attempting uninstall: titan
+    Found existing installation: titan 0.1.0
+    Uninstalling titan-0.1.0:
+      Successfully uninstalled titan-0.1.0
+Successfully installed titan-0.1.0
+
+[notice] A new release of pip is available: 24.3.1 -> 26.1
+[notice] To update, run: pip install --upgrade pip
+(.venv) matt@Mac titan % make eval
+.venv/bin/python -m titan.eval.run --config configs/default.yaml \
+	   \
+	  
+[eval] run=20260430-180931 dir=runs/20260430-180931
+[inference] importing torch ...
+[inference]   torch ok (0.0s)
+[inference] importing transformers ...
+
+
+## 2026-04-30 23:21:11 (user)
+
+ITS STILL HANGING: [eval] run=20260430-180931 dir=runs/20260430-180931
+[inference] importing torch ...
+[inference]   torch ok (0.0s)
+[inference] importing transformers ...
+[inference]   transformers ok (22.4s); loading HuggingFaceTB/SmolLM-135M...
+[inference] base model loaded (7.4s)
+
+
+## 2026-04-30 19:21:56 (assistant)
+
+Hanging on the PEFT step. Let me split that section so we know exactly where.
+
+## 2026-04-30 23:23:40 (user)
+
+its still hanging.  [eval] run=20260430-180931 dir=runs/20260430-180931
+[inference] importing torch ...
+[inference]   torch ok (0.0s)
+[inference] importing transformers ...
+[inference]   transformers ok (2.1s); loading HuggingFaceTB/SmolLM-135M...
+[inference] base model loaded (0.6s)
+[inference] importing peft ...
+[inference]   peft ok (18.1s); loading adapter from runs/20260430-180931/adapter ...
+[inference]   adapter applied (1.3s)
+[inference] moving model to mps ...
+[inference] ready on mps, dtype=float32 (23.1s total)
+
+
+## 2026-04-30 23:25:16 (user)
+
+add what works currently to the readme, at the bottom.  i want a table with checkboxes for each bullet point in each tier, with a separate column i have for what/where it is.
+
+
+## 2026-04-30 23:28:41 (user)
+
+<ide_opened_file>The user opened the file /Users/matt/Desktop/projects/titan/README.md in the IDE. This may or may not be related to the current task.</ide_opened_file>
+i have this issue in eval now:  [15/15] 2.7s  (avg 3.7s)
+modules.json: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 349/349 [00:00<00:00, 1.34MB/s]
+config_sentence_transformers.json: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 116/116 [00:00<00:00, 507kB/s]
+README.md: 10.5kB [00:00, 11.3MB/s]
+sentence_bert_config.json: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 53.0/53.0 [00:00<00:00, 563kB/s]
+config.json: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 612/612 [00:00<00:00, 4.74MB/s]
+model.safetensors: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 90.9M/90.9M [00:02<00:00, 45.2MB/s]
+tokenizer_config.json: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 350/350 [00:00<00:00, 1.09MB/s]
+vocab.txt: 232kB [00:00, 11.8MB/s]
+tokenizer.json: 466kB [00:00, 19.5MB/s]
+special_tokens_map.json: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 112/112 [00:00<00:00, 463kB/s]
+config.json: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 190/190 [00:00<00:00, 852kB/s]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/matt/Desktop/projects/titan/src/titan/eval/run.py", line 169, in <module>
+    main()
+    ~~~~^^
+  File "/Users/matt/Desktop/projects/titan/src/titan/eval/run.py", line 93, in main
+    refusal_prompts = load_refusal_prompts(cfg.eval.refusal_prompts)
+  File "/Users/matt/Desktop/projects/titan/src/titan/eval/refusal.py", line 37, in load_refusal_prompts
+    data = yaml.safe_load(f) or {}
+           ~~~~~~~~~~~~~~^^^
+  File "/Users/matt/Desktop/projects/titan/.venv/lib/python3.13/site-packages/yaml/__init__.py", line 125, in safe_load
+    return load(stream, SafeLoader)
+  File "/Users/matt/Desktop/projects/titan/.venv/lib/python3.13/site-packages/yaml/__init__.py", line 81, in load
+    return loader.get_single_data()
+           ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/matt/Desktop/projects/titan/.venv/lib/python3.13/site-packages/yaml/constructor.py", line 49, in get_single_data
+    node = self.get_single_node()
+  File "/Users/matt/Desktop/projects/titan/.venv/lib/python3.13/site-packages/yaml/composer.py", line 36, in get_single_node
+    document = self.compose_document()
+  File "/Users/matt/Desktop/projects/titan/.venv/lib/python3.13/site-packages/yaml/composer.py", line 55, in compose_document
+    node = self.compose_node(None, None)
+  File "/Users/matt/Desktop/projects/titan/.venv/lib/python3.13/site-packages/yaml/composer.py", line 84, in compose_node
+    node = self.compose_mapping_node(anchor)
+  File "/Users/matt/Desktop/projects/titan/.venv/lib/python3.13/site-packages/yaml/composer.py", line 127, in compose_mapping_node
+    while not self.check_event(MappingEndEvent):
+              ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/matt/Desktop/projects/titan/.venv/lib/python3.13/site-packages/yaml/parser.py", line 98, in check_event
+    self.current_event = self.state()
+                         ~~~~~~~~~~^^
+  File "/Users/matt/Desktop/projects/titan/.venv/lib/python3.13/site-packages/yaml/parser.py", line 438, in parse_block_mapping_key
+    raise ParserError("while parsing a block mapping", self.marks[-1],
+            "expected <block end>, but found %r" % token.id, token.start_mark)
+yaml.parser.ParserError: while parsing a block mapping
+  in "configs/refusal_prompts.yaml", line 5, column 1
+expected <block end>, but found '-'
+  in "configs/refusal_prompts.yaml", line 36, column 1
+
+
+## 2026-04-30 19:29:18 (assistant)
+
+Just line 36 — fixing it.
+
+## 2026-04-30 23:30:49 (user)
+
+<ide_opened_file>The user opened the file /Users/matt/Desktop/projects/titan/configs/refusal_prompts.yaml in the IDE. This may or may not be related to the current task.</ide_opened_file>
+first eval is done: The following generation flags are not valid and may be ignored: ['top_p']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+  [1/5] 3.3s  (avg 3.3s)
+  [5/5] 3.2s  (avg 2.9s)
+[eval] running 22 refusal prompts...
+  [refusal 1/22] 1.3s
+  [refusal 2/22] 1.4s
+  [refusal 3/22] 1.3s
+  [refusal 4/22] 1.2s
+  [refusal 5/22] 1.3s
+  [refusal 6/22] 1.4s
+  [refusal 7/22] 1.3s
+  [refusal 8/22] 1.2s
+  [refusal 9/22] 1.3s
+  [refusal 10/22] 1.3s
+  [refusal 11/22] 1.3s
+  [refusal 12/22] 1.3s
+  [refusal 13/22] 1.2s
+  [refusal 14/22] 1.3s
+  [refusal 15/22] 1.3s
+  [refusal 16/22] 1.2s
+  [refusal 17/22] 1.2s
+  [refusal 18/22] 1.3s
+  [refusal 19/22] 1.3s
+  [refusal 20/22] 1.3s
+  [refusal 21/22] 1.3s
+  [refusal 22/22] 1.3s
+{
+  "rougeL_f1": 0.27038164278636756,
+  "semsim": 0.5428780913352966,
+  "refusal": {
+    "n_prompts": 22,
+    "refused": 0,
+    "refusal_rate": 0.0,
+    "fabrication_rate": 1.0
+  }
+}
+(.venv) matt@Mac titan % 
+...now add results where applicable.  should i run the run.py script?
+
+
+## 2026-04-30 19:32:32 (assistant)
+
+Now bump the status-table rows that the eval run actually completes.
+
+## 2026-04-30 23:35:03 (user)
+
+<ide_opened_file>The user opened the file /Users/matt/Desktop/projects/titan/configs/baseline-no-curation.yaml in the IDE. This may or may not be related to the current task.</ide_opened_file>
+new results on 15 test samples: l] generating on 15 test examples...
+The following generation flags are not valid and may be ignored: ['top_p']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+  [1/15] 3.4s  (avg 3.4s)
+  [5/15] 3.2s  (avg 3.0s)
+  [10/15] 5.9s  (avg 3.6s)
+  [15/15] 5.8s  (avg 4.4s)
+[eval] running 22 refusal prompts...
+  [refusal 1/22] 0.9s
+  [refusal 2/22] 1.3s
+  [refusal 3/22] 1.3s
+  [refusal 4/22] 1.3s
+  [refusal 5/22] 1.3s
+  [refusal 6/22] 1.3s
+  [refusal 7/22] 1.3s
+  [refusal 8/22] 1.3s
+  [refusal 9/22] 1.3s
+  [refusal 10/22] 1.3s
+  [refusal 11/22] 1.3s
+  [refusal 12/22] 1.4s
+  [refusal 13/22] 1.4s
+  [refusal 14/22] 1.3s
+  [refusal 15/22] 1.3s
+  [refusal 16/22] 1.2s
+  [refusal 17/22] 1.4s
+  [refusal 18/22] 1.2s
+  [refusal 19/22] 1.4s
+  [refusal 20/22] 1.2s
+  [refusal 21/22] 1.1s
+  [refusal 22/22] 1.2s
+{
+  "rougeL_f1": 0.1860896631376801,
+  "semsim": 0.4317149519920349,
+  "refusal": {
+    "n_prompts": 22,
+    "refused": 0,
+    "refusal_rate": 0.0,
+    "fabrication_rate": 1.0
+  }
+}
+(.venv) matt@...these results are bad.  i only have 20 minutes left, help prioritize
+
+
+## 2026-04-30 23:35:50 (user)
+
+<ide_opened_file>The user opened the file /Users/matt/Desktop/projects/titan/configs/baseline-no-curation.yaml in the IDE. This may or may not be related to the current task.</ide_opened_file>
+i have time for 1 more to compare to the default.  give me commands
+
+
+## 2026-04-30 23:38:55 (user)
+
+<ide_selection>The user selected the lines 41 to 43 from /Users/matt/Desktop/projects/titan/configs/baseline-no-curation.yaml:
+  num_samples: 15
+  num_qualitative: 15
+  metrics: [rouge, semsim]
+
+This may or may not be related to the current task.</ide_selection>
+what i'd do with more time: better sample curation: llm as a judge with different metrics (come up with some), rank them, then a better eval set.  i also need need add info about RL instead of just SFT.  i want to add DPO or GRPO.  add info about my new research paper (attached)
+
+
+## 2026-04-30 23:41:03 (user)
+
+what i'd do with more time: better sample curation: llm as a judge with different metrics (come up with some), rank them, then a better eval set.  i also need need add info about RL instead of just SFT.  i want to add DPO or GRPO.  add info about my new research paper (attached)
+
+
+## 2026-04-30 23:43:01 (user)
+
+<ide_opened_file>The user opened the file /Users/matt/Desktop/projects/titan/README.md in the IDE. This may or may not be related to the current task.</ide_opened_file>
+make this section SIGNIFICANTLY MORE CONCISE
+

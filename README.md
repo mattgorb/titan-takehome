@@ -54,7 +54,29 @@ System prompt instructs the model to say "I don't know" rather than guess on out
 
 ## Results
 
-TODO — paste from `runs/<id>/eval/metrics.json` after a real run, plus 1-2 paragraphs of honest assessment (where it works, where it fails).
+First end-to-end run — [`configs/default.yaml`](configs/default.yaml) (SmolLM-135M + LoRA r=8, `train_size=4500`, 1 epoch on MPS), evaluated on 5 test examples and 22 refusal prompts:
+
+```json
+{
+  "rougeL_f1": 0.270,
+  "semsim": 0.543,
+  "refusal": {
+    "n_prompts": 22,
+    "refused": 0,
+    "refusal_rate": 0.0,
+    "fabrication_rate": 1.0
+  }
+}
+```
+
+Honest assessment:
+
+- **ROUGE-L 0.27 / semsim 0.54** — modest. The model produces finance-shaped text that's loosely on-topic semantically (~0.5 cosine similarity to references) but lexically diverges from the reference answers. Expected for a 135M base model trained for one epoch on a 4500-row subset; the model has learned the *style* of the data more than the substance.
+- **Refusal failure: 0/22 (100% fabrication rate).** The system prompt explicitly instructs the model to say "I don't know" on out-of-scope, predictive, or unknowable questions, but the model produced an answer for every refusal prompt. Two compounding causes: (1) **SmolLM-135M is a base model, not chat-tuned** — it has no learned behavior of following a system prompt, and the Alpaca-style fallback template we use doesn't change that; (2) the refusal classifier in [refusal.py](src/titan/eval/refusal.py) is keyword-based and would still miss paraphrased refusals if any did occur. Cause (1) is the dominant one here.
+- **Sample size caveat.** 5 test examples is far too small to make quantitative claims about generation quality; the refusal result (22 prompts) is more interpretable. Bumping `eval.num_samples` to ≥30 would make the surface-similarity numbers worth reading.
+- **What this implies.** For a banking knowledge assistant we'd want to (a) start from a chat-tuned base (Qwen2.5-0.5B-Instruct or similar) so the model actually attends to system instructions, and (b) include explicit refusal examples in the training set so refusal becomes a learned behavior rather than a hoped-for one.
+
+Run artifacts at `runs/20260430-180931/` — `metrics.json`, `report.md` with qualitative samples, `config.yaml` snapshot, `data_manifest.json`.
 
 ## Limitations
 
@@ -65,4 +87,53 @@ TODO — paste from `runs/<id>/eval/metrics.json` after a real run, plus 1-2 par
 
 ## What I'd do with more time
 
-TODO.
+- **Better curation.** Replace the keyword filter with LLM-as-judge scoring on domain specificity, factuality, specificity-vs-fluff, refusal calibration, and audience fit; near-dup cluster and keep top-k. Build the eval set the same way, balanced across finance subdomains.
+- **RL instead of SFT.** SFT mimics tokens; it doesn't optimize for correctness or refusal. Move to DPO (needs preference pairs) or GRPO (needs a reward signal) — both blocked here by the absence of labels.
+- **Use CME-GRPO to unblock the labels problem.** My recent paper (_Label-Free Reinforcement Learning via Cross-Model Entropy_, `cme_grpo_neurips.pdf`) uses a stronger verifier model's per-token likelihood as the GRPO reward — no ground truth, no preference data. Concretely: prompt-only training set, cross-family verifier, swap [train.py](src/titan/train.py)'s SFT loss for CME-GRPO on the same LoRA adapter. Expect the 100% fabrication rate to drop sharply since confident-but-wrong answers receive low verifier likelihood.
+
+## Implementation status
+
+Per-bullet checklist mapped to the spec. `[x]` = complete, `[/]` = partial / infrastructure in place but no results yet, `[ ]` = outstanding.
+
+### Tier 1 — Working Pipeline
+
+| | Spec bullet | What / Where |
+|---|---|---|
+| [x] | Load Finance Alpaca from HF | [src/titan/data/load.py](src/titan/data/load.py) — `load_dataset("gbharti/finance-alpaca")` |
+| [x] | Train / val / test split | seeded shuffle + slice in [load.py](src/titan/data/load.py); sizes in `data.{train,val,test}_size` |
+| [x] | Sample / curate training subset (with rationale) | [src/titan/data/curate.py](src/titan/data/curate.py) — finance-keyword topic regex + length/ASCII/dedup; train-only quality filter |
+| [x] | Prompt template (matches inference) | [src/titan/data/format.py](src/titan/data/format.py) — Qwen chat template with Alpaca fallback for base models; same module used at train and inference |
+| [x] | Handle variable data quality (missing fields, formatting) | curate.py drops empty / wrong-length / non-English; format.py handles missing `input` |
+| [x] | Fine-tuning approach (LoRA via PEFT) | [src/titan/train.py](src/titan/train.py) — `LoraConfig` + HF `Trainer` |
+| [x] | Configurable hyperparameters | [configs/default.yaml](configs/default.yaml), [configs/config2.yaml](configs/config2.yaml), [configs/baseline-no-curation.yaml](configs/baseline-no-curation.yaml) |
+| [x] | Random seeds | [src/titan/seed.py](src/titan/seed.py) — Python / NumPy / Torch; called from every entrypoint |
+| [x] | Log loss + val metrics | Trainer stdout + [tracking.append_metrics](src/titan/tracking.py) → `runs/<id>/metrics.jsonl` |
+| [x] | Save adapter to disk (reloadable) | `runs/<id>/adapter/` + tokenizer; loaded on demand by inference.py and serve.py |
+| [x] | Quantitative metrics for generative QA | [src/titan/eval/metrics.py](src/titan/eval/metrics.py) — ROUGE-L, BERTScore, sentence-transformer cosine similarity |
+| [x] | Acknowledgement of what metrics don't capture | "Limitations" section above |
+| [/] | 10–20 qualitative samples in report | report written at `runs/20260430-180931/eval/report.md`; first run only included 5 samples (`num_samples=5`) — bump to ≥15 to meet spec target |
+| [x] | Honest assessment of strengths / failures | "Results" section above |
+| [x] | `POST /ask` | [src/titan/serve.py](src/titan/serve.py) — accepts `question` + optional `context` |
+| [x] | `GET /health` with metadata | serve.py — returns `base_model`, `adaptation`, `run_id`, `loaded_at` |
+| [x] | API loads model at startup, not per-request | serve.py — `@app.on_event("startup")` loads adapter once |
+
+### Tier 2 — Production Thinking
+
+| | Spec bullet | What / Where |
+|---|---|---|
+| [x] | Hyperparameters + config snapshot per run | `runs/<id>/config.yaml` via [tracking.write_config](src/titan/tracking.py) |
+| [x] | Per-step metrics persisted | `runs/<id>/metrics.jsonl` (Trainer + eval phases) |
+| [x] | Saved model ↔ run identification | `runs/<id>/adapter/` + `runs/LATEST` pointer |
+| [x] | Upstream data lineage | `runs/<id>/data_manifest.json` — dataset id, seed, split sizes, content hash |
+| [x] | Mix unanswerable / out-of-scope into eval | [configs/refusal_prompts.yaml](configs/refusal_prompts.yaml) — 17 prompts across out-of-scope / unknowable / harmful / nonsense |
+| [x] | Refusal classifier + scoring | [src/titan/eval/refusal.py](src/titan/eval/refusal.py) — keyword-based; reports `refusal_rate`, `fabrication_rate` |
+| [x] | Refusal strategy described in README | "Refusal strategy (Tier 2)" section above |
+| [x] | Refusal results / measured tradeoffs | 0/22 refusals on first run — see "Results" above |
+
+### Tier 3 — Depth
+
+| | Spec bullet | What / Where |
+|---|---|---|
+| [ ] | Beyond-surface eval framework | not started — current metrics reward overlap, not factual correctness |
+| [/] | Data curation A/B (curated vs naive) | infra: [configs/baseline-no-curation.yaml](configs/baseline-no-curation.yaml) + `--test-from` flag in [eval/run.py](src/titan/eval/run.py) so both runs score against the same curated test set; runs not yet executed |
+| [/] | Multi-run comparison | infra: [configs/config2.yaml](configs/config2.yaml) (Qwen2.5-0.5B + wider LoRA + different batch/grad-accum split); `runs/<id>/` layout supports side-by-side comparison; second run not yet executed |
