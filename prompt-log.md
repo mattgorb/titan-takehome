@@ -1138,3 +1138,54 @@ what i'd do with more time: better sample curation: llm as a judge with differen
 <ide_opened_file>The user opened the file /Users/matt/Desktop/projects/titan/README.md in the IDE. This may or may not be related to the current task.</ide_opened_file>
 make this section SIGNIFICANTLY MORE CONCISE
 
+
+## 2026-04-30 23:47:01 (user)
+
+<ide_opened_file>The user opened the file /Users/matt/Desktop/projects/titan/runs/LATEST in the IDE. This may or may not be related to the current task.</ide_opened_file>
+review my paper given the spec.md.  what updates should i make with 3 minutes?
+
+
+## 2026-04-30 23:48:06 (user)
+
+<ide_opened_file>The user opened the file /Users/matt/Desktop/projects/titan/README.md in the IDE. This may or may not be related to the current task.</ide_opened_file>
+here are final results comparison:   [refusal 22/22] 1.4s
+{
+  "rougeL_f1": 0.18646186978940643,
+  "semsim": 0.4796932637691498,
+  "refusal": {
+    "n_prompts": 22,
+    "refused": 0,
+    "refusal_rate": 0.0,
+    "fabrication_rate": 1.0
+  }
+}
+(.venv) matt@Mac titan % # 4. Print both metrics side-by-side
+echo "=== DEFAULT (curated, run 20260430-180931) ==="
+jq . runs/20260430-180931/eval/metrics.json
+echo "=== BASELINE (no curation, run $BASELINE_RUN) ==="
+jq . runs/$BASELINE_RUN/eval/metrics.json
+zsh: command not found: #
+=== DEFAULT (curated, run 20260430-180931) ===
+{
+  "rougeL_f1": 0.1860896631376801,
+  "semsim": 0.4317149519920349,
+  "refusal": {
+    "n_prompts": 22,
+    "refused": 0,
+    "refusal_rate": 0.0,
+    "fabrication_rate": 1.0
+  }
+}
+=== BASELINE (no curation, run 20260430-193656) ===
+{
+  "rougeL_f1": 0.18646186978940643,
+  "semsim": 0.4796932637691498,
+  "refusal": {
+    "n_prompts": 22,
+    "refused": 0,
+    "refusal_rate": 0.0,
+    "fabrication_rate": 1.0
+  }
+}
+(.venv) matt@Mac titan %
+

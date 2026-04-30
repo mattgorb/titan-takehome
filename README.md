@@ -78,6 +78,19 @@ Honest assessment:
 
 Run artifacts at `runs/20260430-180931/` — `metrics.json`, `report.md` with qualitative samples, `config.yaml` snapshot, `data_manifest.json`.
 
+### Curation A/B (Tier 3)
+
+Both runs trained on the same 4500-row train subset (curated vs naive uncurated), evaluated against the **same canonical curated test set** via `--test-from data/test-canonical` for an apples-to-apples comparison.
+
+| Metric | Default (curated) `20260430-180931` | Baseline (no curation) `20260430-193656` | Δ |
+|---|---|---|---|
+| ROUGE-L F1 | 0.186 | 0.186 | ≈0 |
+| semsim (cosine) | 0.432 | 0.480 | **+0.048 baseline** |
+| refusal_rate | 0.0 | 0.0 | tied (both fail) |
+| fabrication_rate | 1.0 | 1.0 | tied (both fail) |
+
+**Honest reading.** Curation did not help. ROUGE-L is identical and the uncurated baseline actually scored *higher* on semantic similarity. Plausible causes: (1) the keyword regex over-aggressively filters useful examples (e.g., financial concepts not in the keyword list), shrinking the effective training pool more than it improves quality; (2) at 4500 examples × 1 epoch on a 135M base, the noise floor likely dominates the curation signal; (3) the refusal failure is data-quality-orthogonal — both runs fabricate at 100%, which is consistent with the SFT-vs-refusal-as-learned-behavior story. This is the kind of result the spec asks for: a real ablation, not a curated one.
+
 ## Limitations
 
 - CPU only — long training runs require careful subset / epoch budgets.
@@ -89,7 +102,7 @@ Run artifacts at `runs/20260430-180931/` — `metrics.json`, `report.md` with qu
 
 - **Better curation.** Replace the keyword filter with LLM-as-judge scoring on domain specificity, factuality, specificity-vs-fluff, refusal calibration, and audience fit; near-dup cluster and keep top-k. Build the eval set the same way, balanced across finance subdomains.
 - **RL instead of SFT.** SFT mimics tokens; it doesn't optimize for correctness or refusal. Move to DPO (needs preference pairs) or GRPO (needs a reward signal) — both blocked here by the absence of labels.
-- **Use CME-GRPO to unblock the labels problem.** My recent paper (_Label-Free Reinforcement Learning via Cross-Model Entropy_, `cme_grpo_neurips.pdf`) uses a stronger verifier model's per-token likelihood as the GRPO reward — no ground truth, no preference data. Concretely: prompt-only training set, cross-family verifier, swap [train.py](src/titan/train.py)'s SFT loss for CME-GRPO on the same LoRA adapter. Expect the 100% fabrication rate to drop sharply since confident-but-wrong answers receive low verifier likelihood.
+- **Use CME-GRPO to unblock the labels problem.** My recent paper (_Label-Free Reinforcement Learning via Cross-Model Entropy_) uses a stronger verifier model's per-token likelihood as the GRPO reward — no ground truth, no preference data. Concretely: prompt-only training set, cross-family verifier, swap [train.py](src/titan/train.py)'s SFT loss for CME-GRPO on the same LoRA adapter. Expect the 100% fabrication rate to drop sharply since confident-but-wrong answers receive low verifier likelihood.
 
 ## Implementation status
 
