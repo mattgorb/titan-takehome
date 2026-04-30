@@ -1,0 +1,52 @@
+# Banking SLM fine-tuning config — Qwen2.5-0.5B + LoRA on CPU.
+# Defaults are conservative for a laptop run; tune per machine.
+
+seed: 42
+run_id: null          # auto-generated as YYYYMMDD-HHMMSS if null
+runs_dir: runs
+data_dir: data
+
+model:
+  base: HuggingFaceTB/SmolLM-135M
+  device: mps         # Apple Silicon GPU; "cpu" for portability, "cuda" if available
+  dtype: float32      # bfloat16 if your CPU supports it; float32 is safest
+  max_length: 256     # finance Q&A is short; halving from 512 ≈ 2x faster training
+
+data:
+  hf_dataset: gbharti/finance-alpaca
+  train_size: 4500     # bump up once a full run feels fast enough
+  val_size: 50        # used by Trainer for eval_steps during training
+  test_size: 200      # held out for final eval
+  curate: true
+
+lora:
+  r: 8
+  alpha: 16
+  dropout: 0.05
+  target_modules: [q_proj, v_proj]
+
+train:
+  epochs: 1
+  batch_size: 2
+  grad_accum: 8       # effective batch 16
+  learning_rate: 2.0e-4
+  warmup_ratio: 0.03
+  weight_decay: 0.0
+  logging_steps: 5
+  eval_steps: 20      # with train_size=300 and effective batch 16, total ≈ 19 steps
+  save_steps: 50
+  max_steps: -1       # -1 = full epoch(s)
+
+eval:
+  num_samples: 200
+  num_qualitative: 15
+  metrics: [rouge, bertscore, semsim]
+  semsim_model: sentence-transformers/all-MiniLM-L6-v2
+  refusal_prompts: configs/refusal_prompts.yaml
+
+serve:
+  host: 0.0.0.0
+  port: 8000
+  max_new_tokens: 256
+  temperature: 0.2
+  top_p: 0.9
